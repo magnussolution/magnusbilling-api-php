@@ -20,7 +20,7 @@
 
 namespace magnusbilling\api;
 
-class magnusBilling
+class MagnusBilling
 {
     protected $api_key;
     protected $api_secret;
@@ -67,7 +67,7 @@ class magnusBilling
                 'Mozilla/4.0 (compatible; MagnusBilling PHP bot; ' . php_uname('a') . '; PHP/' . phpversion() . ')'
             );
         }
-        curl_setopt($ch, CURLOPT_URL, $trading_url . '/' . $module . '/' . $action);
+        curl_setopt($ch, CURLOPT_URL, $trading_url . '/index.php/' . $module . '/' . $action);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -88,50 +88,46 @@ class magnusBilling
         }
     }
 
-    public function create($module, $username, $data)
+    public function create($module, $data)
     {
-        $data['module']   = $module;
-        $data['action']   = 'save';
-        $data['username'] = $username;
-        $data['id']       = 0;
+        $data['module'] = $module;
+        $data['action'] = 'save';
+        $data['id']     = 0;
 
         return $this->query($data);
     }
 
-    public function update($module, $username, $id, $data)
+    public function update($module, $id, $data)
     {
-        $data['module']   = $module;
-        $data['action']   = 'save';
-        $data['username'] = $username;
-        $data['id']       = $id;
+        $data['module'] = $module;
+        $data['action'] = 'save';
+        $data['id']     = $id;
 
         return $this->query($data);
     }
 
-    public function destroy($module, $username, $id)
+    public function destroy($module, $id)
     {
         return $this->query(
             array(
-                'module'   => $module,
-                'action'   => 'destroy',
-                'username' => $username,
-                'id'       => $id,
+                'module' => $module,
+                'action' => 'destroy',
+                'id'     => $id,
             )
         );
     }
 
-    public function read($module, $username, $page = 1, $filter = [])
+    public function read($module, $page = 1)
     {
 
         return $this->query(
             array(
-                'module'   => $module,
-                'action'   => 'read',
-                'username' => $username,
-                'page'     => $page,
-                'start'    => $page == 1 ? 0 : ($page - 1) * 25,
-                'limit'    => 25,
-                'filter'   => json_encode($this->filter),
+                'module' => $module,
+                'action' => 'read',
+                'page'   => $page,
+                'start'  => $page == 1 ? 0 : ($page - 1) * 25,
+                'limit'  => 25,
+                'filter' => json_encode($this->filter),
             )
         );
     }
@@ -146,6 +142,14 @@ class magnusBilling
         );
     }
 
+    public function createUser($data)
+    {
+        $data['createUser'] = 1;
+        $data['id']         = 0;
+
+        return $this->query($data);
+    }
+
     public function getModules()
     {
         return $this->query(
@@ -155,24 +159,40 @@ class magnusBilling
         );
     }
 
-    public function getId($module, $username, $filed, $value)
+    public function getMenu($username)
+    {
+        return $this->query(
+            array(
+                'username' => $username,
+                'getMenu'  => 1,
+            )
+        );
+    }
+
+    public function getId($module, $filed, $value)
     {
 
         $this->setFilter($filed, $value, 'eq');
 
         $query = $this->query([
-            'module'   => $module,
-            'action'   => 'read',
-            'username' => $username,
-            'page'     => 1,
-            'start'    => 0,
-            'limit'    => 1,
-            'filter'   => json_encode($this->filter),
+            'module' => $module,
+            'action' => 'read',
+            'page'   => 1,
+            'start'  => 0,
+            'limit'  => 1,
+            'filter' => json_encode($this->filter),
         ]);
+
+        $this->filter = [];
 
         if (isset($query['rows'][0])) {
             return $query['rows'][0]['id'];
         }
+    }
+
+    public function clearFilter()
+    {
+        $this->filter = [];
     }
 
     public function setFilter($field, $value, $comparison = 'st', $type = 'string')
