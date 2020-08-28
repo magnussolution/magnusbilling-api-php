@@ -88,7 +88,7 @@ class MagnusBilling
         }
     }
 
-    public function create($module, $data)
+    public function create($module, $data = [])
     {
         $data['module'] = $module;
         $data['action'] = 'save';
@@ -116,18 +116,30 @@ class MagnusBilling
             )
         );
     }
-
-    public function read($module, $page = 1)
+    public function read($module, $page = 1, $action = 'read')
     {
 
         return $this->query(
             array(
                 'module' => $module,
-                'action' => 'read',
+                'action' => $action,
                 'page'   => $page,
                 'start'  => $page == 1 ? 0 : ($page - 1) * 25,
                 'limit'  => 25,
                 'filter' => json_encode($this->filter),
+            )
+        );
+    }
+
+    public function buyDID($id_did, $id_user)
+    {
+
+        return $this->query(
+            array(
+                'module'  => 'did',
+                'action'  => 'buy',
+                'id'      => $id_did,
+                'id_user' => $id_user,
             )
         );
     }
