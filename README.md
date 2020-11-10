@@ -38,7 +38,7 @@ require_once "vendor/autoload.php";
 use magnusbilling\api\magnusBilling;
 
 $magnusBilling             = new MagnusBilling('API KEY', 'SECRET KEY');
-$magnusBilling->public_url = "http://1.1.1.1/mbilling/"; // Your MagnusBilling URL
+$magnusBilling->public_url = "http://1.1.1.1/mbilling"; // Your MagnusBilling URL
 
 //read data from user module
 $result = $magnusBilling->read('user');
