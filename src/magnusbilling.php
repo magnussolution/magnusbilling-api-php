@@ -116,7 +116,7 @@ class MagnusBilling
             )
         );
     }
-    public function read($module, $page = 1, $action = 'read')
+    public function read($module, $page = 1, $action = 'read', $id = 0)
     {
 
         return $this->query(
@@ -127,6 +127,7 @@ class MagnusBilling
                 'start'  => $page == 1 ? 0 : ($page - 1) * 25,
                 'limit'  => 25,
                 'filter' => json_encode($this->filter),
+                'id'     => $id,
             )
         );
     }
