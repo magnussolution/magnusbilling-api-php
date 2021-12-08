@@ -18,7 +18,7 @@
  *
  */
 
-namespace magnusbilling\api;
+namespace MagnusBilling;
 
 class MagnusBilling
 {
