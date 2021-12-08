@@ -6,7 +6,7 @@
  *
  * @package MagnusBilling
  * @author Adilson Leffa Magnus.
- * @copyright Copyright (C) 2005 - 2018 MagnusSolution. All rights reserved.
+ * @copyright Copyright (C) 2005 - 2022 MagnusSolution. All rights reserved.
  * ###################################
  *
  * This software is released under the terms of the GNU Lesser General Public License v2.1
@@ -20,7 +20,7 @@
 
 namespace magnusbilling\api;
 
-class magnusBilling
+class MagnusBilling
 {
     protected $api_key;
     protected $api_secret;
