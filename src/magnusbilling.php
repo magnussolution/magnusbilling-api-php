@@ -18,9 +18,9 @@
  *
  */
 
-namespace MagnusBilling;
+namespace magnusbilling\api;
 
-class MagnusBilling
+class magnusBilling
 {
     protected $api_key;
     protected $api_secret;
@@ -116,7 +116,7 @@ class MagnusBilling
             )
         );
     }
-    public function read($module, $page = 1, $action = 'read', $id = 0)
+    public function read($module, $page = 1, $action = 'read')
     {
 
         return $this->query(
@@ -127,7 +127,6 @@ class MagnusBilling
                 'start'  => $page == 1 ? 0 : ($page - 1) * 25,
                 'limit'  => 25,
                 'filter' => json_encode($this->filter),
-                'id'     => $id,
             )
         );
     }

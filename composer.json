@@ -1,5 +1,5 @@
 {
-    "name": "MagnusBilling PHP API",
+    "name": "magnussolution/magnusbilling-api",
     "description": "PHP wrapper for the MagnusBilling API.",
     "type": "library",
     "license": "MIT",
@@ -13,8 +13,8 @@
         "php": ">=5.4.0"
     },
     "autoload": {
-        "psr-0": {
-            "MagnusBilling": "src/"
+        "psr-4": {
+            "magnusbilling\\api\\": "src/"
         }
     }
 }
