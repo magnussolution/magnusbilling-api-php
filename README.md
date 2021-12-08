@@ -16,7 +16,7 @@ Installation
 ------------
 To install MagnusBilling API package you can run this simple command
 ```
-composer require magnussolution/magnusbilling-api:dev-master
+composer require magnussolution/magnusbilling-api
 ```
 or add it on `composer.json`...
 
