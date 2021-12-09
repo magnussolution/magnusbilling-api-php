@@ -1,5 +1,6 @@
 # composer vendor dir
 /vendor/
-
+.DS_Store
 # composer.lock in applications is ignored since it's automatically created by composer when application is installed
 /composer.lock
+src/.DS_Store

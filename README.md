@@ -18,19 +18,10 @@ To install MagnusBilling API package you can run this simple command
 ```
 composer require magnussolution/magnusbilling-api
 ```
-or add it on `composer.json`...
-
-```javascript
-{
-    "require": {
-        "php": ">=5.4.0",
-        "magnussolution/magnusbilling-api": "dev-master"
-    }
-}
-```
 
 
 Usage
+-----
 ```javascript
 
 require_once "vendor/autoload.php";
