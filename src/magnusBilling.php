@@ -88,10 +88,10 @@ class MagnusBilling
         }
     }
 
-    public function create($module, $data = [])
+    public function create($module, $data = [], $action = 'save')
     {
         $data['module'] = $module;
-        $data['action'] = 'save';
+        $data['action'] = $action;
         $data['id']     = 0;
 
         return $this->query($data);
