@@ -144,6 +144,27 @@ class MagnusBilling
         );
     }
 
+    public function releaseDID($did)
+    {
+        $this->setFilter('did', $did, 'eq', 'string');
+
+        $result = $this->read('did');
+
+        if (!isset($result['rows'][0]['id'])) {
+            return json_encode(['error' => 'DID ' . $did . ' not exist']);
+        }
+
+        $this->clearFilter();
+
+        return $this->query(
+            array(
+                'module' => 'did',
+                'action' => 'liberar',
+                'ids'    => json_encode([$result['rows'][0]['id']]),
+            ),
+        );
+    }
+
     public function getFields($module)
     {
         return $this->query(
@@ -156,6 +177,8 @@ class MagnusBilling
 
     public function createUser($data)
     {
+        $data['module']     = 'user';
+        $data['action']     = 'save';
         $data['createUser'] = 1;
         $data['id']         = 0;
 
