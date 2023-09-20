@@ -161,7 +161,7 @@ class MagnusBilling
                 'module' => 'did',
                 'action' => 'liberar',
                 'ids'    => json_encode([$result['rows'][0]['id']]),
-            ),
+            )
         );
     }
 
