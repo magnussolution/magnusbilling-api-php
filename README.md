@@ -1,7 +1,9 @@
 # MagnusBilling API
 PHP wrapper for the MagnusBilling API. <a href="https://www.magnusbilling.org" title="Magnusbilling. The best opensource of the world" alt="Magnusbilling. The best opensource of the world" />https://www.magnusbilling.org</a>
 
-How to Install connect and read using API: https://www.youtube.com/watch?v=wamWtzpKLeA
+How to Install connect and read using API: https://www.youtube.com/watch?v=wamWtzpKLeA 
+Como instalar e conectar no seu MagnusBilling: https://www.youtube.com/watch?v=fJ8tpDHSa8I
+
 
 [![Total Downloads](https://poser.pugx.org/magnussolution/magnusbilling-api/downloads)](https://packagist.org/packages/magnussolution/magnusbilling-api)
 [![License](https://poser.pugx.org/magnussolution/magnusbilling-api/license)](https://packagist.org/packages/magnussolution/magnusbilling-api)
