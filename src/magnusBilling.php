@@ -144,6 +144,20 @@ class MagnusBilling
         );
     }
 
+    public function spyCall($channel, $sip_account, $type)
+    {
+
+        return $this->query(
+            [
+                'module'  => 'callOnLine',
+                'action'  => 'spyCall',
+                'channel' => $channel,
+                'sipuser' => $sip_account,
+                'type'    => $type,
+            ]
+        );
+    }
+
     public function releaseDID($did)
     {
         $this->setFilter('did', $did, 'eq', 'string');
