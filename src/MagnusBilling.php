@@ -76,7 +76,7 @@ class MagnusBilling
         $res = curl_exec($ch);
 
         if ($res === false) {
-            throw new Exception('Curl error: ' . curl_error($ch));
+            throw new \Exception('Curl error: ' . curl_error($ch));
         }
 
         $dec = json_decode($res, true);
@@ -116,7 +116,7 @@ class MagnusBilling
             )
         );
     }
-    public function read($module, $page = 1, $action = 'read')
+    public function read($module, $page = 1, $action = 'read', $limit = 25)
     {
 
         return $this->query(
@@ -124,8 +124,8 @@ class MagnusBilling
                 'module' => $module,
                 'action' => $action,
                 'page'   => $page,
-                'start'  => $page == 1 ? 0 : ($page - 1) * 25,
-                'limit'  => 25,
+                'start'  => $page == 1 ? 0 : ($page - 1) * $limit,
+                'limit'  => $limit,
                 'filter' => json_encode($this->filter),
             )
         );
