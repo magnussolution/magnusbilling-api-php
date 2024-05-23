@@ -79,6 +79,12 @@ class MagnusBilling
             throw new \Exception('Curl error: ' . curl_error($ch));
         }
 
+        $res_content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        if (strtolower($res_content_type) === "application/force-download") {
+            // It's a audio download request
+            return $res;
+        }
+
         $dec = json_decode($res, true);
         if (!$dec) {
             print_r($res);
