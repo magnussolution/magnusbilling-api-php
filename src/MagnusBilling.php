@@ -62,7 +62,11 @@ class MagnusBilling
         static $ch = null;
         if (is_null($ch)) {
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            if (isset($req['write_cb'])) {
+                curl_setopt($ch, CURLOPT_WRITEFUNCTION, $req['write_cb']);
+            } else {
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            }
             curl_setopt($ch, CURLOPT_USERAGENT,
                 'Mozilla/4.0 (compatible; MagnusBilling PHP bot; ' . php_uname('a') . '; PHP/' . phpversion() . ')'
             );
@@ -79,13 +83,8 @@ class MagnusBilling
             throw new \Exception('Curl error: ' . curl_error($ch));
         }
 
-        $res_content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-        if (strtolower($res_content_type) === "application/force-download") {
-            // It's a audio download request
-            return [
-                'type' => 'binary',
-                'blob' => $res,
-            ];
+        if (isset($req['write_cb'])) {
+            return $res;
         }
 
         $dec = json_decode($res, true);
@@ -184,6 +183,24 @@ class MagnusBilling
                 'module' => 'did',
                 'action' => 'liberar',
                 'ids'    => json_encode([$result['rows'][0]['id']]),
+            )
+        );
+    }
+
+    public function getCallAudioRecording($call_id, $stream_cb)
+    {
+        $this->clearFilter();
+        $this->setFilter('id', $call_id, 'eq', 'numeric');
+
+        return $this->query(
+            array(
+                'module' => "call",
+                'action' => "downloadRecord",
+                'page'   => $page = 1,
+                'start'  => $page == 1 ? 0 : ($page - 1) * $limit,
+                'limit'  => $limit = 25,
+                'filter' => json_encode($this->filter),
+                'write_cb' => $stream_cb,
             )
         );
     }
