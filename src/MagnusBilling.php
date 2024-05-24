@@ -70,6 +70,12 @@ class MagnusBilling
             curl_setopt($ch, CURLOPT_USERAGENT,
                 'Mozilla/4.0 (compatible; MagnusBilling PHP bot; ' . php_uname('a') . '; PHP/' . phpversion() . ')'
             );
+        } else {
+            if (isset($req['write_cb'])) {
+                curl_setopt($ch, CURLOPT_WRITEFUNCTION, $req['write_cb']);
+            } else {
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            }
         }
         curl_setopt($ch, CURLOPT_URL, $trading_url . '/index.php/' . $module . '/' . $action);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
