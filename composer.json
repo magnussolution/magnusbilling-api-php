@@ -1,5 +1,5 @@
 {
-    "name": "magnussolution/magnusbilling-api",
+    "name": "imskm/magnusbilling-api-php",
     "description": "PHP wrapper for the MagnusBilling API.",
     "type": "library",
     "license": "MIT",

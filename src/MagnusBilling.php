@@ -62,10 +62,20 @@ class MagnusBilling
         static $ch = null;
         if (is_null($ch)) {
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            if (isset($req['write_cb'])) {
+                curl_setopt($ch, CURLOPT_WRITEFUNCTION, $req['write_cb']);
+            } else {
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            }
             curl_setopt($ch, CURLOPT_USERAGENT,
                 'Mozilla/4.0 (compatible; MagnusBilling PHP bot; ' . php_uname('a') . '; PHP/' . phpversion() . ')'
             );
+        } else {
+            if (isset($req['write_cb'])) {
+                curl_setopt($ch, CURLOPT_WRITEFUNCTION, $req['write_cb']);
+            } else {
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            }
         }
         curl_setopt($ch, CURLOPT_URL, $trading_url . '/index.php/' . $module . '/' . $action);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
@@ -76,7 +86,11 @@ class MagnusBilling
         $res = curl_exec($ch);
 
         if ($res === false) {
-            throw new Exception('Curl error: ' . curl_error($ch));
+            throw new \Exception('Curl error: ' . curl_error($ch));
+        }
+
+        if (isset($req['write_cb'])) {
+            return $res;
         }
 
         $dec = json_decode($res, true);
@@ -116,7 +130,7 @@ class MagnusBilling
             )
         );
     }
-    public function read($module, $page = 1, $action = 'read')
+    public function read($module, $page = 1, $action = 'read', $limit = 25)
     {
 
         return $this->query(
@@ -124,8 +138,8 @@ class MagnusBilling
                 'module' => $module,
                 'action' => $action,
                 'page'   => $page,
-                'start'  => $page == 1 ? 0 : ($page - 1) * 25,
-                'limit'  => 25,
+                'start'  => $page == 1 ? 0 : ($page - 1) * $limit,
+                'limit'  => $limit,
                 'filter' => json_encode($this->filter),
             )
         );
@@ -175,6 +189,24 @@ class MagnusBilling
                 'module' => 'did',
                 'action' => 'liberar',
                 'ids'    => json_encode([$result['rows'][0]['id']]),
+            )
+        );
+    }
+
+    public function getCallAudioRecording($call_id, $stream_cb)
+    {
+        $this->clearFilter();
+        $this->setFilter('id', $call_id, 'eq', 'numeric');
+
+        return $this->query(
+            array(
+                'module' => "call",
+                'action' => "downloadRecord",
+                'page'   => $page = 1,
+                'start'  => $page == 1 ? 0 : ($page - 1) * $limit,
+                'limit'  => $limit = 25,
+                'filter' => json_encode($this->filter),
+                'write_cb' => $stream_cb,
             )
         );
     }
