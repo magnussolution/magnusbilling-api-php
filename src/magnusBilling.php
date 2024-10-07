@@ -18,8 +18,6 @@
  *
  */
 
-namespace magnusbilling\api;
-
 class MagnusBilling
 {
     protected $api_key;
@@ -33,7 +31,7 @@ class MagnusBilling
         $this->api_secret = $api_secret;
     }
 
-    private function query(array $req = array())
+    private function query(array $req = [])
     {
 
         // API settings
@@ -41,8 +39,8 @@ class MagnusBilling
         $secret      = $this->api_secret;
         $trading_url = $this->public_url;
 
-        $module = $req['module'];
-        $action = $req['action'];
+        $module = isset($req['module']) ? $req['module'] : null;
+        $action = isset($req['action']) ? $req['action'] : null;
 
         // generate a nonce to avoid problems with 32bit systems
         $mt           = explode(' ', microtime());
@@ -53,10 +51,10 @@ class MagnusBilling
         $sign      = hash_hmac('sha512', $post_data, $secret);
 
         // generate the extra headers
-        $headers = array(
+        $headers = [
             'Key: ' . $key,
             'Sign: ' . $sign,
-        );
+        ];
 
         // curl handle (initialize if required)
         static $ch = null;
@@ -80,7 +78,7 @@ class MagnusBilling
         }
 
         $dec = json_decode($res, true);
-        if (!$dec) {
+        if ( ! $dec) {
             print_r($res);
             exit;
         } else {
@@ -109,25 +107,25 @@ class MagnusBilling
     public function destroy($module, $id)
     {
         return $this->query(
-            array(
+            [
                 'module' => $module,
                 'action' => 'destroy',
                 'id'     => $id,
-            )
+            ]
         );
     }
     public function read($module, $page = 1, $action = 'read')
     {
 
         return $this->query(
-            array(
+            [
                 'module' => $module,
                 'action' => $action,
                 'page'   => $page,
                 'start'  => $page == 1 ? 0 : ($page - 1) * 25,
                 'limit'  => 25,
                 'filter' => json_encode($this->filter),
-            )
+            ]
         );
     }
 
@@ -135,12 +133,12 @@ class MagnusBilling
     {
 
         return $this->query(
-            array(
+            [
                 'module'  => 'did',
                 'action'  => 'buy',
                 'id'      => $id_did,
                 'id_user' => $id_user,
-            )
+            ]
         );
     }
 
@@ -164,28 +162,28 @@ class MagnusBilling
 
         $result = $this->read('did');
 
-        if (!isset($result['rows'][0]['id'])) {
+        if ( ! isset($result['rows'][0]['id'])) {
             return json_encode(['error' => 'DID ' . $did . ' not exist']);
         }
 
         $this->clearFilter();
 
         return $this->query(
-            array(
+            [
                 'module' => 'did',
                 'action' => 'liberar',
                 'ids'    => json_encode([$result['rows'][0]['id']]),
-            )
+            ],
         );
     }
 
     public function getFields($module)
     {
         return $this->query(
-            array(
+            [
                 'module'    => $module,
                 'getFields' => 1,
-            )
+            ]
         );
     }
 
@@ -202,19 +200,19 @@ class MagnusBilling
     public function getModules()
     {
         return $this->query(
-            array(
+            [
                 'getModules' => 1,
-            )
+            ]
         );
     }
 
     public function getMenu($username)
     {
         return $this->query(
-            array(
+            [
                 'username' => $username,
                 'getMenu'  => 1,
-            )
+            ]
         );
     }
 
